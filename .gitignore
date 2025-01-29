@@ -1,0 +1,18 @@
+# Ignore node_modules in both front-end and back-end
+Back-end/node_modules/
+Front-end/node_modules/
+
+# Ignore .env files
+Back-end/.env
+Front-end/.env
+
+# Ignore package-lock.json files
+package-lock.json
+Front-end/package-lock.json
+Back-end/package-lock.json
+
+# Ignore other sensitive or unnecessary files
+*.log
+*.tmp
+.DS_Store
+Thumbs.db
