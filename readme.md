@@ -77,3 +77,16 @@
         5. Pushed the latest changes to GitHub and updated README.  
 
         ---
+        # Ecommerce-Follow-Along
+
+## Milestone 10: Product Schema & API
+
+### Achievements:
+- Created a **Mongoose Schema** for products
+- Implemented a **POST API endpoint** to add products
+- Added **validation** for data integrity
+- Connected the API to **MongoDB**
+- Ensured proper error handling and response messages
+
+
+        ---
