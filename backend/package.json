@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Ecommerce application",
   "license": "ISC",
-  "author": "Devansh",
+  "author": "Kanneha",
   "type": "commonjs",
   "main": "backend/server.js",
   "scripts": {
