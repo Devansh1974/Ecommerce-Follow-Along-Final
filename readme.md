@@ -325,7 +325,7 @@ In this milestone, you'll create a backend endpoint to fetch all orders for a sp
 
 In this milestone, you'll create a My Orders page to display all the user's orders by fetching data from the backend.
 
-## Key Achievements:
+## Key Achievement:
 •⁠  ⁠Create My Orders Page: Build a new page to show user orders.
 •⁠  ⁠Fetch User Orders: Send a GET request to the /my-orders endpoint with the user's email.
 •⁠  ⁠Display Orders: Render the list of user orders on the page.
