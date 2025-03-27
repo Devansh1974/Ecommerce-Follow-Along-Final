@@ -341,3 +341,11 @@ In this milestone, you'll enhance the My Orders page by allowing users to cancel
 •⁠  ⁠Create Cancel Endpoint: Build a POST endpoint to receive the order-id and update the order status to "canceled".
 •⁠  ⁠Update Order Status: Save the updated order status in the database.
 
+# Milestone 29: Integrate PayPal Payment Gateway
+
+In this milestone, you'll set up a PayPal payment gateway to offer online payment alongside Cash on Delivery (COD) on your order confirmation page.
+
+## Key Achievements:
+•⁠  ⁠Set Up PayPal Account: Create a PayPal Developer account and access sandbox credentials (UserID and Client ID).
+•⁠  ⁠Add Payment Options: Include radio buttons on the order confirmation page to choose between COD and Online Payment.
+•⁠  ⁠Prepare for PayPal Integration: Ensure PayPal buttons are displayed when the Online Payment option is selected.
