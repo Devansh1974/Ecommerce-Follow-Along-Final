@@ -12,7 +12,7 @@ export default function ProductDetails() {
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(null);
 	const [quantity, setQuantity] = useState(1);
-	const email = "yash@gmail.com"
+	const email = "sanya.thakur.s69@kalvium.community"
 
 	useEffect(() => {
 		const fetchProduct = async () => {

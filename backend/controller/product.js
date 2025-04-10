@@ -1,8 +1,8 @@
 // backend/controllers/product.js
 
 const express = require('express');
-const Product = require('../model/product');
-const User = require('../model/user');
+const Product = require('../modal/product');
+const User = require('../modal/user');
 const router = express.Router();
 const { pupload } = require("../multer");
 const path = require('path');

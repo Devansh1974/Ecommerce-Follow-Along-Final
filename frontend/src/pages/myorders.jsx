@@ -4,7 +4,7 @@ import Nav from '../components/auth/nav'
 
 const MyOrdersPage = () => {
     const [orders, setOrders] = useState([]);
-    const defaultEmail = 'yash@gmail.com';
+    const defaultEmail = 'sanya.thakur.s69@kalvium.community';
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 

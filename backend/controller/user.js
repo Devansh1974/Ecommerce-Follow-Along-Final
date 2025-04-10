@@ -1,32 +1,42 @@
 const express = require("express");
 const path = require("path");
 const fs = require("fs");
-const User = require("../model/user");
+const User = require("../modal/user");
 const router = express.Router();
 const { upload } = require("../multer");
-const ErrorHandler = require("../utils/ErrorHandler");
+const ErrorHandler = require("../utility/ErrorHandler");
 const catchAsyncErrors = require("../middleware/catchAsyncError");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken"); // Import JSON Web Token
 require("dotenv").config();
 
-// ✅ Create User (Signup)
+JWT_SECRET = "s733W0Qqx2D2+SDfuGtlR+y0eApEKxZ7rYcWkxc2XNs="
+
+
 router.post("/create-user", upload.single("file"), catchAsyncErrors(async (req, res, next) => {
     console.log("Creating user...");
-    let { name, email, password } = req.body;
-    email = email.toLowerCase(); // Convert email to lowercase for consistency
+    const { name, email, password } = req.body;
 
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
+    const userEmail = await User.findOne({ email });
+    if (userEmail) {
         if (req.file) {
-            fs.unlinkSync(path.join(__dirname, "../uploads", req.file.filename));
+            const filepath = path.join(__dirname, "../uploads", req.file.filename);
+            try {
+                fs.unlinkSync(filepath);
+            } catch (err) {
+                console.log("Error removing file:", err);
+                return res.status(500).json({ message: "Error removing file" });
+            }
         }
         return next(new ErrorHandler("User already exists", 400));
     }
 
+    let fileUrl = "";
+    if (req.file) {
+        fileUrl = path.join("uploads", req.file.filename);
+    }
     const hashedPassword = await bcrypt.hash(password, 10);
-    console.log("At Create:", "Password:", password, "Hash:", hashedPassword);
-
-    const fileUrl = req.file ? path.join("uploads", req.file.filename) : "";
+    console.log("At Create ", "Password: ", password, "Hash: ", hashedPassword);
     const user = await User.create({
         name,
         email,
@@ -36,51 +46,58 @@ router.post("/create-user", upload.single("file"), catchAsyncErrors(async (req, 
             url: fileUrl,
         },
     });
-
-    console.log(user);
+    console.log(user)
     res.status(201).json({ success: true, user });
 }));
 
-// ✅ User Login
+// In your login route (e.g., routes/user.js)
 router.post("/login", catchAsyncErrors(async (req, res, next) => {
     console.log("Logging in user...");
-    let { email, password } = req.body;
-    email = email.toLowerCase(); // Ensure email is in lowercase
-
+    const { email, password } = req.body;
     if (!email || !password) {
         return next(new ErrorHandler("Please provide email and password", 400));
     }
-
     const user = await User.findOne({ email }).select("+password");
     if (!user) {
         return next(new ErrorHandler("Invalid Email or Password", 401));
     }
-
     const isPasswordMatched = await bcrypt.compare(password, user.password);
-    console.log("At Auth:", "Entered Password:", password, "Stored Hash:", user.password);
-    console.log("Password Match:", isPasswordMatched);
-
     if (!isPasswordMatched) {
         return next(new ErrorHandler("Invalid Email or Password", 401));
     }
 
-    user.password = undefined;
-    res.status(200).json({ success: true, user });
+    // Generate JWT token
+    const token = jwt.sign(
+        { id: user._id, email: user.email },
+        process.env.JWT_SECRET || "your_jwt_secret",
+        { expiresIn: "1h" }
+    );
+
+    // Set token in an HttpOnly cookie
+    res.cookie("token", token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production", // use true in production
+        sameSite: "Strict",
+        maxAge: 3600000, // 1 hour
+    });
+
+    user.password = undefined; // Remove password from response
+    res.status(200).json({
+        success: true,
+        user,
+    });
 }));
 
-// ✅ Get User Profile
+
 router.get("/profile", catchAsyncErrors(async (req, res, next) => {
-    let { email } = req.query;
+    const { email } = req.query;
     if (!email) {
         return next(new ErrorHandler("Please provide an email", 400));
     }
-
-    email = email.toLowerCase();
     const user = await User.findOne({ email });
     if (!user) {
         return next(new ErrorHandler("User not found", 404));
     }
-
     res.status(200).json({
         success: true,
         user: {
@@ -93,34 +110,46 @@ router.get("/profile", catchAsyncErrors(async (req, res, next) => {
     });
 }));
 
-// ✅ Add Address
 router.post("/add-address", catchAsyncErrors(async (req, res, next) => {
-    let { country, city, address1, address2, zipCode, addressType, email } = req.body;
-    email = email.toLowerCase();
+    const { country, city, address1, address2, zipCode, addressType, email } = req.body;
 
     const user = await User.findOne({ email });
+
     if (!user) {
         return next(new ErrorHandler("User not found", 404));
     }
 
-    const newAddress = { country, city, address1, address2, zipCode, addressType };
+    const newAddress = {
+        country,
+        city,
+        address1,
+        address2,
+        zipCode,
+        addressType,
+    };
+
     user.addresses.push(newAddress);
     await user.save();
 
-    res.status(201).json({ success: true, addresses: user.addresses });
+    res.status(201).json({
+        success: true,
+        addresses: user.addresses,
+    });
 }));
 
-// ✅ Get User Addresses
 router.get("/addresses", catchAsyncErrors(async (req, res, next) => {
-    let { email } = req.query;
-    email = email.toLowerCase();
-
+    const { email } = req.query;
+    if (!email) {
+        return next(new ErrorHandler("Please provide an email", 400));
+    }
     const user = await User.findOne({ email });
     if (!user) {
         return next(new ErrorHandler("User not found", 404));
     }
-
-    res.status(200).json({ success: true, addresses: user.addresses });
+    res.status(200).json({
+        success: true,
+        addresses: user.addresses,
+    });
 }));
 
 module.exports = router;
