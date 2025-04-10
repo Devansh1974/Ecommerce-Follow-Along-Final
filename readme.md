@@ -349,3 +349,79 @@ In this milestone, you'll set up a PayPal payment gateway to offer online paymen
 •⁠  ⁠Set Up PayPal Account: Create a PayPal Developer account and access sandbox credentials (UserID and Client ID).
 •⁠  ⁠Add Payment Options: Include radio buttons on the order confirmation page to choose between COD and Online Payment.
 •⁠  ⁠Prepare for PayPal Integration: Ensure PayPal buttons are displayed when the Online Payment option is selected.
+
+# Milestone 30: Implementing PayPal Online Payment Integration
+What We Did
+In this milestone, we successfully integrated PayPal online payments into our application. This allows users to choose between Cash on Delivery (COD) and PayPal for order payments. Below is a step-by-step breakdown of the tasks we completed.
+
+🛠️ Steps We Followed
+1️⃣ Created a PayPal Developer Account
+We registered on the PayPal Developer Dashboard.
+We navigated to the Sandbox Accounts section and generated a test account.
+From this test account, we copied the Client ID needed for integration.
+2️⃣ Installed PayPal SDK in React
+To integrate PayPal, we installed the required npm package:
+
+# Milestone 31: Implementing Global State Management with Redux
+Welcome to Milestone 31! In this milestone, we learned how to implement global state management using Redux. This helps us manage data like user email across the entire app without the need for prop drilling.
+
+Learning Goals-
+By the end of this milestone, we understood:
+
+How to use Redux for managing global application state.
+How to configure and use a Redux store in a React app.
+How to create and use actions and reducers.
+How to share global data (like user email) across multiple components.
+🧰 Steps We Followed
+1️⃣ Installed Redux and React-Redux
+We installed the necessary Redux packages:
+
+npm install redux react-redux
+
+# Milestone 32: Using Redux to Store and Access Email Globally
+ 
+Today, we expanded on our Redux setup by **storing the user email** in the global state during login and **accessing** it in all other pages using Redux hooks.
+
+---
+
+## Learning Goals
+
+By the end of this milestone, we learned:
+
+- How to **dispatch** actions to update the Redux store.
+- How to **access** global state using `useSelector`.
+- How Redux simplifies global data sharing across components.
+
+---
+
+## Steps We Followed
+
+### 1️ Stored User Email in Global State (Login Page)
+
+In the Login page, once the user successfully logs in, we used the `useDispatch` hook to store the email in Redux.
+
+```js
+import { useDispatch } from "react-redux";
+import { setEmail } from "../store/userActions";
+
+const dispatch = useDispatch();
+
+// Example usage after successful login
+dispatch(setEmail(userEmail));
+
+# Milestone 33: Storing JWT Tokens in Cookies
+
+Welcome to Milestone 33!  
+In this milestone, we learned how to **create JWT tokens** and **store them inside cookies** for persistent authentication.
+
+---
+
+## 🎯 Learning Goals
+
+By the end of this milestone, you will:
+
+- Understand how to generate JWT tokens using `jsonwebtoken`.
+- Learn how to store JWT tokens inside cookies for secure user sessions.
+- Control token expiration using `maxAge`.
+
+---
